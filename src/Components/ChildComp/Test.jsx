@@ -13,7 +13,7 @@ const Test = () => {
   const [score, setScore] = useState(0);
   const [loading, setLoading] = useState(true); 
   const location = useLocation();
-  const { skill,username, email, level, num } = location.state || {};
+  const { isLoggedin,skill,username, email, level, num } = location.state || {};
   const navigate= useNavigate();
   const populateQuestions = (data) => {
     if (!Array.isArray(data)) {
@@ -73,7 +73,7 @@ const Test = () => {
   
   const finishTest = () => {
     setIsTestFinished(true);
-    setLoading(true)
+    
  
     const percentage = (score / questions.length) * 100;
     const results = {
@@ -85,18 +85,36 @@ const Test = () => {
       noOfQuestions: questions.length
     };
     
-
-    axios.post(API_URL + "user/saveSession/", results)
-      .then((response) => {
-        console.log("Test session stored successfully:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error storing session:", error);
-      });
+    if (!isLoggedin) {
+      
+      alert("Test is submitted. Your score is " + score + ". You will be directed to the Login Page.");
+      navigate('/');
       setLoading(false)
-      alert("test is submitted your score is "+score+" go to dashboard")
-      navigate('/dashboard',{state:{username:username, email:email}});
-  };
+    }
+     else {
+   
+      setLoading(true)
+      axios.post(API_URL + "user/saveSession/", results)
+        .then((response) => {
+          console.log("Test session stored successfully:", response.data);
+    
+          
+          navigate('/dashboard', { state: { email: email, username: username } });
+        })
+        .catch((error) => {
+          console.error("Error storing session:", error);
+        })
+        .finally(() => {
+   
+          setLoading(false);
+        });
+      
+    
+     }
+    
+    
+   
+    };
 
   return (
     <>

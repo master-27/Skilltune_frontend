@@ -20,18 +20,18 @@ const LoginForm=()=>{
             return
          }
 
+         console.log(import.meta.env.VITE_API_URL)
        
-         axios.post(API_URL+"auth/login/",{
-            
-                email:email,
-                password:password
-            
+         axios.post(`${import.meta.env.VITE_API_URL}auth/login/`, {
+            email: email,
+            password: password
         })
         .then((response) => {
             if (response.status === 200) {
                 console.log(response.data)
                 setUsername(response.data.userName);
                  setEmail(response.data.email); 
+                 localStorage.setItem("SkilltuneLogin",true)
                 navigate('/dashboard',{state:{username:response.data.userName, email:email}}); 
             } else {
                 alert("Invalid credentials");

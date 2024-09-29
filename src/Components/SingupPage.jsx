@@ -21,6 +21,7 @@ const Signup = () => {
     setResume(file);
     console.log('Selected file:', file);
   };
+  
 
   const validate = async () => {
     if (username.trim() === '' || email.trim() === '' || password.trim() === '' || rePassword.trim() === '') {
@@ -113,7 +114,7 @@ const Signup = () => {
       {isLoading && <Loader />?<Loader/>:null}
       <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600 py-10 px-4'>
         <div className="flex items-center justify-center shadow-md bg-gradient-to-b from-gray-600 to-blue-600">
-          <div className="bg-white max-w-4xl w-full p-8 rounded-lg shadow-md grid grid-cols-1 gap-8 md:grid-cols-2">
+          <div className="bg-gray-300 max-w-4xl w-full p-8 rounded-lg shadow-md grid grid-cols-1 gap-8 md:grid-cols-2">
            
             <div className="flex flex-col bg-gray-200 px-3 py-4 items-center justify-center">
               <h2 className="text-2xl font-bold mb-4 text-gray-700">Sign Up</h2>

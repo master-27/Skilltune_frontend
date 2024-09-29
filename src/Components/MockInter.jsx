@@ -5,13 +5,30 @@ import Loader from './ChildComp/Loader';
 import Navbar from './ChildComp/Navbar';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const QuestionComponent = ({ question, qIndex, onAnswerSubmit }) => {
+const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, submittedStatus }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [error, setError] = useState(null);
   const [audioUrl, setAudioUrl] = useState("");
   const mediaRecorderRef = useRef(null);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const audioChunksRef = useRef([]);
+
+  async function requestMicrophoneAccess() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log("Microphone access granted.");
+      // Proceed with handling the stream
+    } catch (error) {
+      console.error("Microphone access denied or not available:", error);
+      alert("Microphone access is required for this feature.");
+    }
+  }
+
+  console.log(localStorage.getItem("SkillTuneLogin"))
+  
+  requestMicrophoneAccess();
+  
 
   const startRecording = async () => {
     try {
@@ -28,7 +45,6 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit }) => {
         const url = URL.createObjectURL(audioBlob1);
         setAudioUrl(url);
         setAudioBlob(audioBlob1);
-        // Stop the audio stream tracks
         stream.getTracks().forEach(track => track.stop());
       };
 
@@ -52,14 +68,21 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit }) => {
   };
 
   const handleAudioUpload = async () => {
-    if (audioBlob) {
-      await onAnswerSubmit(qIndex, audioBlob);
+    stopRecording()
+    setIsSubmitted(true);
+    if (audioBlob && !isSubmitted) { // Check if not already submitted
+      const success = await onAnswerSubmit(qIndex, audioBlob);
+      if (success) {
+         // Mark as submitted
+        onSubmitSuccess(); // Notify parent of successful submission
+      }
+      else{setIsSubmitted(false)}
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg border border-gray-200">
-      <h2 className="text-xl font-semibold mb-4 text-center">{qIndex + 1}. {question}</h2>
+    <div className="max-w-xxl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg border border-gray-200">
+      <h2 className="text-xl font-normal mb-4 text-"><span className='font-bold text-red-500'>{qIndex + 1}.</span> {question}</h2>
       <div className="flex flex-col items-center">
         <div className="mb-4">
           {isRecording ? (
@@ -81,6 +104,7 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit }) => {
               : 'bg-green-500 hover:bg-green-600'
           } text-white font-bold py-2 px-4 rounded-full mb-4`}
           onClick={isRecording ? stopRecording : startRecording}
+          disabled={isSubmitted} // Disable button if already submitted
         >
           {isRecording ? 'Stop Recording' : 'Start Recording'}
         </button>
@@ -89,10 +113,13 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit }) => {
       
         <button 
           onClick={handleAudioUpload}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full"
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full ${isSubmitted ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isSubmitted} // Disable if already submitted
         >
           Submit 
-        </button><span className='ml-10 mt-3 text-red-500'>*Do submit after recording</span>
+        </button>
+        {isSubmitted && <p className="text-green-500 mt-2">Submitted successfully!</p>} {/* Submission feedback */}
+        <span className='ml-10 mt-3 text-red-500'>*Do submit after recording</span>
       </div>
     </div>
   );
@@ -102,17 +129,32 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit }) => {
 const MockInterview = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [transcription, setTranscription] = useState('');
-  const[feedbackData,setFeedbackData] = useState({})
+  const [feedbackData, setFeedbackData] = useState({});
   const [QandA, setQandA] = useState(new Map());
+  const [submittedCount, setSubmittedCount] = useState(0);
   const location = useLocation();
   const email = location.state?.email || "mksharma@gmail.com";
   const username = location.state?.username || "Mohit";
-  
+  const resume = location.state?.resume||null;
+  console.log("mock_inter email:",email)
+  console.log("username:",username)
+  const navigate = useNavigate();
 
-  const navigate = useNavigate()
   useEffect(() => {
     const fetchQuestions = async () => {
+      if(localStorage.getItem("SkillTuneLogin")==="false"){
+        const formData = new FormData();
+        formData.append("file", resume);
+        setLoading(true)
+              const skillsResponse = await axios.post(API_URL+"test/IQWithoutLogin/",formData,{
+                headers: {
+                  'Content-Type': 'multipart/form-data', // Set multipart header
+              },
+              })
+              setQuestions(skillsResponse.data)
+          setLoading(false)
+      }
+      else{
       const formData = new FormData();
       formData.append('email', email);
       try {
@@ -128,11 +170,12 @@ const MockInterview = () => {
       } finally {
         setLoading(false);
       }
+    }
     };
 
     fetchQuestions();
   }, [email]);
-
+  
   const handleAnswerSubmit = async (index, audioBlob) => {
     const ques = questions[index];
     const formData = new FormData();
@@ -142,7 +185,7 @@ const MockInterview = () => {
       const response = await axios.post(API_URL + 'user/get', formData);
       if (response.status === 200) {
         QandA.set(ques, response.data);
-        setTranscription(response.data);
+        return true; // Indicate successful submission
       } else {
         alert("Transcription Failed: " + response.status);
       }
@@ -150,73 +193,82 @@ const MockInterview = () => {
       console.error('Error transcribing audio:', error);
       alert("Error: " + error.message);
     }
+    return false; // Indicate failure
+  };
+
+  const handleSubmitSuccess = () => {
+    setSubmittedCount(prev => prev + 1);
   };
 
   const EndTest = async () => {
-   
     if (QandA.size === 0) {
-        navigate("/mockResult", { state: { questions: questions, feedbackData: null,email:email,username:username }, replace: true });
-        return; 
+      if(localStorage.getItem("SkillTuneLogin"))
+      navigate("/mockResult", { state: { questions: questions, feedbackData: null, email: email, username: username }, replace: true });
+      else
+      navigate("/mockResult", { state: { questions: questions, feedbackData: null}, replace: true });
+      return; 
     }
+    console.log(submittedCount)
+    console.log(QandA.size)
+    // if (submittedCount !== QandA.size) {
+    //   alert("Ensure that all recorded audios are submitted.");
+    //   return;
+    // }
 
     setLoading(true);
     
-
     const questionsAndAnswers = Array.from(QandA.entries()).map(([question, answer]) => ({
-        question,
-        answer
+      question,
+      answer
     }));
 
     try {
-        //  API call to evaluate answers
-        const response = await axios.post(API_URL + "user/evaluateAnswers", questionsAndAnswers);
-        
-        if (response.status === 200) {
-            console.log(response.data);
-            setFeedbackData(response.data);
-            
-            //  to mockResult with feedback data after it's set
-            navigate("/mockResult", { state: { questions: questions, feedbackData: response.data,email:email,username:username}, replace: true });
-        } else {
-            alert("Failed to evaluate answers: " + response.status);
-        }
+      const response = await axios.post(API_URL + "user/evaluateAnswers", questionsAndAnswers);
+      
+      if (response.status === 200) {
+        console.log(response.data);
+        setFeedbackData(response.data);
+        navigate("/mockResult", { state: { questions: questions, feedbackData: response.data, email: email, username: username }, replace: true });
+      } else {
+        alert("Failed to evaluate answers: " + response.status);
+      }
     } catch (error) {
-        alert("Exception occurred, please submit again");
+      alert("Exception occurred, please submit again");
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
-
+  };
 
   return (
     <>
-    <Navbar/>
-    <div className='flex-row bg-gradient-to-r m-0 p-8 from-blue-500 to-indigo-600 items-center'>
-      <div className='bg-gradient-to-r m-0 p-8 from-blue-500 to-indigo-600'>
-        {loading ? (
-          <div className="text-white text-lg"><Loader/></div>
-        ) : (
-          questions.length > 0 ? (
-            questions.map((question, index) => (
-              <QuestionComponent
-                key={index}
-                question={question}
-                qIndex={index}
-                onAnswerSubmit={handleAnswerSubmit}
-              />
-            ))
+      <Navbar />
+      <div className='flex-row bg-gradient-to-r m-0 p-8 from-blue-500 to-indigo-600 items-center'>
+        <div className='bg-gradient-to-r m-0 p-8 from-blue-500 to-indigo-600'>
+          {loading ? (
+            <div className="text-white text-lg"><Loader /></div>
           ) : (
-            <div className="text-white text-lg">No questions available</div>
-          )
-        )}
+            questions.length > 0 ? (
+              questions.map((question, index) => (
+                <QuestionComponent
+                  key={index}
+                  question={question}
+                  qIndex={index}
+                  onAnswerSubmit={handleAnswerSubmit}
+                  onSubmitSuccess={handleSubmitSuccess}
+                  submittedStatus={QandA.has(question)} // Check if this question has been submitted
+                />
+              ))
+            ) : (
+              <div className="text-white text-lg">No questions available</div>
+            )
+          )}
+        </div>
+        <button onClick={EndTest} className='bg-green-500 rounded-md my-8 mx-8 px-5 py-3'>
+          Finish Test
+        </button>
       </div>
-      <button onClick={EndTest} className='bg-green-500 rounded-md my-8 mx-8 px-5 py-3'>
-        Finish Test
-      </button>
-    </div>
     </>
   );
-  
 };
 
 export default MockInterview;

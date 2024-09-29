@@ -16,9 +16,9 @@ const PracticeSession = () => {
   const [numOfQuestions, setNumOfQuestions] = useState(5);
   const [loading, setLoading] = useState(true); // State to manage loading
   const location = useLocation();
-  const { isLoggedin = false, email, username } = location.state || {};
+  const { isLoggedin = false, email, username,resume = null } = location.state || {};
   const navigate = useNavigate();
-
+  const dummySkills = ["React","Spring Boot","MySQL","SQLite","Python","C++","Java","Firebase"]
   useEffect(() => {
     const fetchSkillsAndSessions = async () => {
       try {
@@ -32,14 +32,16 @@ const PracticeSession = () => {
           const sessionsResponse = await axios.post(API_URL + 'user/getSessions/?email=' + email);
           setPreviousSessions(sessionsResponse.data);
         } else { // Access and give practice session without login.
-          const cachedSkills = localStorage.getItem('skills');
-          if (cachedSkills) {
-            setSkills(JSON.parse(cachedSkills));
-          } else {
-            const skillsResponse = await axios.get(API_URL + "test/skills/");
-            setSkills(skillsResponse.data);
-            localStorage.setItem('skills', JSON.stringify(skillsResponse.data));
-          }
+          const formData = new FormData();
+    formData.append("file", resume);
+    setLoading(true)
+          const skillsResponse = await axios.post(API_URL+"test/skFromResume/",formData,{
+            headers: {
+              'Content-Type': 'multipart/form-data', // Set multipart header
+          },
+          })
+          setSkills(skillsResponse.data);
+
         }
       } catch (error) {
         console.log("Exception Occurred", error);
@@ -49,13 +51,13 @@ const PracticeSession = () => {
     };
 
     fetchSkillsAndSessions();
-  }, [isLoggedin, email]);
+  }, [isLoggedin,, email]);
 
   // Start the practice session with selected skill
   const startPracticeSession = () => {
     if (selectedSkill !== "") {
       navigate("/test", {
-        state: { skill: selectedSkill, username:username,email: email, level: difficultyLevel, num: numOfQuestions }
+        state: { isLoggedin:isLoggedin,skill: selectedSkill, username:username,email: email, level: difficultyLevel, num: numOfQuestions }
       });
     } else {
       alert("Please select a skill");

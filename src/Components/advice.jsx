@@ -2,12 +2,22 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 const AdviceSection = () => {
+  const location = useLocation()
   const email = location.state?.email || "mksharma@gmail.com";
   const username = location.state?.username || "Mohit";
+  const resume = location.state?.resume||null;
   const navigate = useNavigate();
 
+  console.log("advice:email: ",email)
+  console.log("username:",username)
+  console.log(localStorage.getItem("SkillTuneLogin"))
   const handleStartInterview = () => {
-    navigate("/mockInter", { state: { email: email,username:username} });
+    console.log(localStorage.getItem("SkillTuneLogin"))
+   if(localStorage.getItem("SkillTuneLogin"))
+    navigate("/mockInter", { state: { email: email,username:username,resume:resume} });
+  else
+    navigate("/mockInter",{state:{resume:resume}})
+   
   };
 
   return (
