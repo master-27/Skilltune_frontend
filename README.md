@@ -1,5 +1,3 @@
-Here’s a README file tailored to your **SkillTune** project based on the features and technologies you've described.
-
 ---
 
 # **SkillTune**  
