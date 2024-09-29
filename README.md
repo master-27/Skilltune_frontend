@@ -140,9 +140,4 @@ Follow the steps to set up SSL for your Elastic Beanstalk environment:
 ## **Contributing**
 Contributions are welcome! Please fork the repository and create a pull request with detailed descriptions of the changes you’ve made.
 
-## **License**
-This project is licensed under the MIT License.
 
----
-
-Let me know if you want any additional details or further adjustments!
