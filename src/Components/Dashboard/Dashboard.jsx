@@ -58,7 +58,7 @@ const Dashboard = () => {
           />
           <QuickLinks email={email} username={username} />
           <Feedback message="Great job on completing your recent practice sessions! Keep up the good work and continue to improve your skills." />
-          <Footer />
+          
         </main>
       </div>
     </>
