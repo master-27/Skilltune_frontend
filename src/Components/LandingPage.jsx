@@ -6,6 +6,7 @@ import Navbar from "./ChildComp/Navbar";
 
 import Overview from "./Dashboard/Overview";
 import { useNavigate } from "react-router-dom";
+import Footer from "./Dashboard/Footer";
 
 const LandingPage=()=>{
 
@@ -53,7 +54,9 @@ const LandingPage=()=>{
         <LoginForm />
 
     </div>
+   
     </div>
+   
     </>
     )
 }   

@@ -18,6 +18,7 @@ import DummyQuestions from './Components/MockInter.jsx'
 import Loader from './Components/ChildComp/Loader.jsx'
 import MockInterview from './Components/MockInter.jsx'
 import MockResult from './MockResult.jsx'
+import Footer from './Components/Dashboard/Footer.jsx'
 
 
 
@@ -38,6 +39,7 @@ function App() {
   <Route path='/mockResult' element={<MockResult/>}/>
 
 </Routes>
+<Footer/>
  </>
 
   )
