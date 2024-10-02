@@ -119,7 +119,7 @@ const Test = () => {
   return (
     <>
       <Navbar />
-      <div className="p-6 bg-gray-100 min-h-screen">
+      <div className="p-6 bg-gray-300 min-h-screen">
         <h2 className="text-3xl font-bold mb-6 text-center">Practice Test</h2>
 
         {loading ? ( 
@@ -144,7 +144,7 @@ const Test = () => {
               <div className="text-center">
                 <button
                   onClick={finishTest}
-                  className="mt-6 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none transition duration-300"
+                  className="mt-6 px-6 py-3 bg-gray-500  font-bold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none transition duration-300"
                 >
                   Finish Test
                 </button>
@@ -154,7 +154,7 @@ const Test = () => {
         )}
 
         {isTestFinished && (
-          <div className="mt-6 text-center text-green-500 font-semibold text-lg">
+          <div className="mt-6 text-center text-purple-500 font-semibold text-lg">
             Test completed! Your results have been saved.
           </div>
         )}

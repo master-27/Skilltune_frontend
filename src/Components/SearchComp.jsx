@@ -56,7 +56,7 @@ const SkillSearch = ({ onSkillsSelect }) => {
 
     return (
         <div className="mb-4">
-            <label className="block font-bold text-gray-700 inline-block mb-2">Skills</label><span className='text-xs'>&nbsp;(select at lease 5 skills)</span>
+            <label className="block font-bold inline-block mb-2">Skills</label><span className='text-xs'>&nbsp;(select at lease 5 skills)</span>
             <input
                 type="text"
                 className="border rounded w-full p-2"
@@ -79,7 +79,7 @@ const SkillSearch = ({ onSkillsSelect }) => {
             )}
             {selectedSkills.length > 0 && (
                 <div className="mt-2">
-                    <h4 className="text-gray-700 font-semibold">Selected Skills:</h4>
+                    <h4 className="font-semibold">Selected Skills:</h4>
                     <div className="flex flex-wrap mt-1">
                         {selectedSkills.map((skill, index) => (
                             <span

@@ -48,7 +48,7 @@ const Dashboard = () => {
   return (
     <>
       <Navbar isLoggedin={true} username={username} email={email} />
-      <div className="bg-gray-100 min-h-screen container mx-auto px-4 py-6">
+      <div className="bg-gray-300 min-h-screen   px-4 py-6">
         <main className="mt-6">
           <Overview
             sessionsCompleted={sessionsCompleted}

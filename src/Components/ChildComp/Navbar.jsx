@@ -10,18 +10,17 @@ const Navbar = ({isLoggedin,username,email}) => {
 navigate("/")
   }
   return (
-    <nav className="flex sticky z-50 top-0 justify-between items-center shadow-mdpy-6 px-6 py-2 bg-gray-800 shadow-md">
+    <nav className="flex sticky z-50 top-0 justify-between  shadow-mdpy-6 px-6 py-2 bg-gray-700 shadow-md">
     
-      <h2 className="text-white text-xl font-bold">SkillTune by Mohit</h2>
+      <h2 className="text-white text-xl font-bold">SkillTune</h2>
 
       {
         isLoggedin ? (
     <div className='flex flex-col'>
-      <h4 className='text-white'>Username: {username}</h4>
-      <div className='flex items-center space-x-4 mb-2'>
-        <h4 className='text-white'>Email: {email}</h4>
-      </div>
-      <button  onClick = {handleClick}className="bg-blue-400 py-2 px-2 rounded-md">Logout</button>
+      <h4 className='text-white text-sm'>User: {username}</h4>      
+        <h4 className='text-white text-sm'>Email: {email}</h4>
+    
+      <button  onClick = {handleClick}className="bg-gray-500 text-sm py-2 rounded-md">Logout</button>
     </div>
   ) : null 
 }

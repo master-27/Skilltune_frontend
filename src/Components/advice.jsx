@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from './ChildComp/Navbar';
 
 const AdviceSection = () => {
   const location = useLocation()
@@ -21,7 +22,9 @@ const AdviceSection = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r from-blue-500 to-indigo-600">
+    <>
+    <Navbar/>
+    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-r bg-gray-300">
       <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-lg">
         <h1 className="text-3xl font-bold text-gray-800 mb-6">Interview Advice</h1>
         <p className="text-lg text-gray-600 mb-6">
@@ -29,13 +32,14 @@ const AdviceSection = () => {
           <span className='text-red-500'>*You will be provided 30 seconds for recording per question.</span>
         </p>
         <button
-          className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-full"
+          className="bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-6 rounded-full"
           onClick={handleStartInterview} 
         >
           Start Interview
         </button>
       </div>
     </div>
+    </>
   );
 }
 

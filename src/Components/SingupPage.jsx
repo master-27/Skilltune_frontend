@@ -112,14 +112,15 @@ const Signup = () => {
     <>
       <Navbar />
       {isLoading && <Loader />?<Loader/>:null}
-      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-indigo-600 py-10 px-4'>
-        <div className="flex items-center justify-center shadow-md bg-gradient-to-b from-gray-600 to-blue-600">
-          <div className="bg-gray-300 max-w-4xl w-full p-8 rounded-lg shadow-md grid grid-cols-1 gap-8 md:grid-cols-2">
+      <div className='flex flex-col items-center justify-center min-h-screen bg-gradient-to-r bg-gray-300 py-10 px-4'>
+        <div className="flex items-center justify-center shadow-md bg-gradient-to-b">
+          <div className="bg-white
+           max-w-4xl w-full p-8 rounded-lg shadow-md grid grid-cols-1 gap-8 md:grid-cols-2">
            
             <div className="flex flex-col bg-gray-200 px-3 py-4 items-center justify-center">
-              <h2 className="text-2xl font-bold mb-4 text-gray-700">Sign Up</h2>
+              <h2 className="text-2xl font-bold mb-4 ">Sign Up</h2>
               <div className="mb-4">
-                <label className="block text-gray-700">Username</label>
+                <label className="block ">Username</label>
                 <input
                   type="text"
                   className="border rounded w-full p-2"
@@ -129,7 +130,7 @@ const Signup = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Email</label>
+                <label className="block ">Email</label>
                 <input
                   type="email"
                   className="border rounded w-full p-2"
@@ -139,7 +140,7 @@ const Signup = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Password<span className="text-xs">&nbsp;&nbsp;(Enter at least 8 characters)</span></label>
+                <label className="block ">Password<span className="text-xs">&nbsp;&nbsp;(Enter at least 8 characters)</span></label>
                 <input
                   type="password"
                   className="border rounded w-full p-2"
@@ -149,7 +150,7 @@ const Signup = () => {
                 />
               </div>
               <div className="mb-4">
-                <label className="block text-gray-700">Confirm Password</label>
+                <label className="block ">Confirm Password</label>
                 <input
                   type="password"
                   className="border rounded w-full p-2"
@@ -161,11 +162,11 @@ const Signup = () => {
             </div>
 
             <div className="flex flex-col px-3 py-4 bg-gray-300 items-start justify-start">
-              <h1 className='text-2xl font-bold mb-4 text-gray-700'></h1>
+              <h1 className='text-2xl font-bold mb-4 '></h1>
               <SkillSearch onSkillsSelect={setSelectedSkills} />
               <span className='font-bold mb-3 '> OR </span>
               <div className="mb-4">
-                <label className="block font-bold text-gray-700">Upload Resume</label>
+                <label className="block font-bold ">Upload Resume</label>
                 <input
                   type="file"
                   accept=".pdf"
@@ -179,7 +180,7 @@ const Signup = () => {
 
         <button
           onClick={handleSubmit}
-          className="mt-6 bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+          className="mt-6 bg-gray-500 font-bold px-6 py-2 rounded hover:bg-blue-600"
         >
           Sign Up
         </button>

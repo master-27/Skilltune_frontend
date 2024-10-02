@@ -72,14 +72,14 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
   };
 
   return (
-    <div className="max-w-xxl mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg border border-gray-200">
+    <div className="max-w-xxl mx-auto mt-8 p-3 bg-white shadow-lg rounded-lg border border-gray-200">
       <h2 className="text-xl font-normal mb-4 text-"><span className='font-bold text-red-500'>{qIndex + 1}.</span> {question}</h2>
       <div className="flex flex-col items-center">
         <div className="mb-4">
           {isRecording ? (
             <div className="text-blue-500 font-semibold">Recording in progress...</div>
           ) : audioUrl ? (
-            <audio controls className="mb-4">
+            <audio controls className="mb-4 w-40 px-2">
               <source src={audioUrl} type="audio/wav" />
               Your browser does not support the audio tag.
             </audio>
@@ -250,8 +250,8 @@ const MockInterview = () => {
   return (
     <>
       <Navbar />
-      <div className='flex-row bg-gradient-to-r m-0 p-8 from-blue-500 to-indigo-600 items-center'>
-        <div className='bg-gradient-to-r m-0 p-8 from-blue-500 to-indigo-600'>
+      <div className='flex-row items-center justify-center bg-gradient-to-r m-0 p-2 bg-gray-300 items-center'>
+        <div className='bg-gradient-to-r m-0 p-3 bg-gray-300'>
           {loading ? (
             <div className="text-white text-lg"><Loader /></div>
           ) : (
@@ -271,7 +271,7 @@ const MockInterview = () => {
             )
           )}
         </div>
-        <button onClick={EndTest} className='bg-green-500 rounded-md my-8 mx-8 px-5 py-3'>
+        <button onClick={EndTest} className='bg-green-500 font-bold text-white hover:bg-green-600  rounded-md my-8 mx-8 px-5 py-3'>
           Finish Test
         </button>
       </div>
