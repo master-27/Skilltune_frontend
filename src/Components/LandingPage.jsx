@@ -46,8 +46,8 @@ const LandingPage=()=>{
         <h1 className="text-4xl font-bold mb-4">SkillTune</h1>
         <TypingEffect text={"SkillTune is an AI-powered platform designed to help you prepare for interviews by tailoring practice questions to your resume and skills." } speed={100}/>
        <label className="font-bold mb-1 mt-10">Upload Resume<span className="font-normal text-red-500 text-sx">(*without Login)</span></label><input onChange={handleFileUpload}type='file' accept=".pdf"></input>
-        <button  onClick={handleMcq}className="bg-gray-500 rounded-md font-bold hover:bg-gray-400 py-2 mt-11" type="button">Multiple Choice Questions</button>
-        <button onClick={handleInterview} className="bg-gray-500 rounded-md font-bold hover:bg-gray-400 py-2 mt-11" type="button">Interview Practice</button>
+        <button  onClick={handleMcq}className="bg-gray-500 rounded-md text-white font-bold hover:bg-gray-400 py-2 mt-11" type="button">Multiple Choice Questions</button>
+        <button onClick={handleInterview} className="bg-gray-500 rounded-md text-white font-bold hover:bg-gray-400 py-2 mt-11" type="button">Interview Practice</button>
         
     </div>
     <div className=" flex-1 justify-center items-center  m-5 px-5 py-5 ">

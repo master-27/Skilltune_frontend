@@ -59,7 +59,7 @@ const LoginForm=()=>{
             <form className="flex flex-col " onSubmit={handleSubmit}>
             <span className="text-xl">Email: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input className="px-2 py-2 w-full mb-3 rounded-md" placeholder="Email" onChange={(item)=>{setEmail(item.target.value)}}  type="email"/> <br/>
             <span className="text-xl">Password: </span><input className="px-2  rounded-md py-2 mb-3" placeholder="Password" onChange={(item)=>{setPassword(item.target.value)}} type="password"/><br/>
-            <button className="bg-gray-500 hover:bg-gray-400 rounded-md px-2 py-2 font-bold justify-center items-center" type="submit">Login</button>
+            <button className="bg-gray-500 text-white hover:bg-gray-400 rounded-md px-2 py-2 font-bold justify-center items-center" type="submit">Login</button>
             <span onClick={signup} className=" cursor-pointer mt-3">Don't have account?/<span className="underline hover:text-blue-600">SingUp</span></span> 
             </form>
         </>

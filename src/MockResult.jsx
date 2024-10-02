@@ -27,7 +27,7 @@ const FeedbackDisplay = () => {
   if (!feedbackData || !Array.isArray(feedbackData.feedback)) {
     return <div className='flex flex-col bg-gray-300 min-h-screen  items-center'>
     <div className="text-center p-6">No feedback data available.</div>
-      <button onClick={handleBack} className='bg-gray-500 font-bold hover:bg-gray-400  py-2 px-2 rounded-md '>Go Back</button>
+      <button onClick={handleBack} className='bg-gray-500 font-bold text-white hover:bg-gray-400  py-2 px-2 rounded-md '>Go Back</button>
       </div>
     
   }

@@ -144,7 +144,7 @@ const Test = () => {
               <div className="text-center">
                 <button
                   onClick={finishTest}
-                  className="mt-6 px-6 py-3 bg-gray-500  font-bold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none transition duration-300"
+                  className="mt-6 px-6 py-3 bg-gray-500 text-white font-bold rounded-lg shadow-md hover:bg-gray-400 focus:outline-none transition duration-300"
                 >
                   Finish Test
                 </button>

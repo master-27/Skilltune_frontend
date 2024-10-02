@@ -180,7 +180,7 @@ const Signup = () => {
 
         <button
           onClick={handleSubmit}
-          className="mt-6 bg-gray-500 font-bold px-6 py-2 rounded hover:bg-blue-600"
+          className="mt-6 bg-gray-500 text-white font-bold px-6 py-2 rounded hover:bg-blue-600"
         >
           Sign Up
         </button>

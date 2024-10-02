@@ -20,7 +20,7 @@ navigate("/")
       <h4 className='text-white text-sm'>User: {username}</h4>      
         <h4 className='text-white text-sm'>Email: {email}</h4>
     
-      <button  onClick = {handleClick}className="bg-gray-500 text-sm py-2 rounded-md">Logout</button>
+      <button  onClick = {handleClick}className="bg-gray-500 text-white text-sm py-2 rounded-md">Logout</button>
     </div>
   ) : null 
 }

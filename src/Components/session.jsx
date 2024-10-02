@@ -168,7 +168,7 @@ const PracticeSession = () => {
 
           <div className='flex justify-center my-8 items-center'>
             <button
-              className="bg-gray-500 font-bold rounded-lg px-6 py-2 mb-6 hover:bg-gray-400"
+              className="bg-gray-500 text-white font-bold rounded-lg px-6 py-2 mb-6 hover:bg-gray-400"
               onClick={startPracticeSession}
             >
               Start Session
