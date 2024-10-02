@@ -31,7 +31,7 @@ const LoginForm=()=>{
                 console.log(response.data)
                 setUsername(response.data.userName);
                  setEmail(response.data.email); 
-                 localStorage.setItem("SkilltuneLogin",true)
+                 localStorage.setItem("SkillTuneLogin","true")
                 navigate('/dashboard',{state:{username:response.data.userName, email:email}}); 
             } else {
                 alert("Invalid credentials");

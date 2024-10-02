@@ -14,20 +14,11 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const audioChunksRef = useRef([]);
 
-  async function requestMicrophoneAccess() {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      console.log("Microphone access granted.");
-      // Proceed with handling the stream
-    } catch (error) {
-      console.error("Microphone access denied or not available:", error);
-      alert("Microphone access is required for this feature.");
-    }
-  }
+ 
 
   console.log(localStorage.getItem("SkillTuneLogin"))
   
-  requestMicrophoneAccess();
+ 
   
 
   const startRecording = async () => {
@@ -142,7 +133,10 @@ const MockInterview = () => {
 
   useEffect(() => {
     const fetchQuestions = async () => {
+      console.log("here ")
+      requestMicrophoneAccess();
       if(localStorage.getItem("SkillTuneLogin")==="false"){
+       console.log(localStorage.getItem("SkillTuneLogin"))
         const formData = new FormData();
         formData.append("file", resume);
         setLoading(true)
@@ -155,6 +149,7 @@ const MockInterview = () => {
           setLoading(false)
       }
       else{
+        console.log("her1")
       const formData = new FormData();
       formData.append('email', email);
       try {
@@ -174,7 +169,7 @@ const MockInterview = () => {
     };
 
     fetchQuestions();
-  }, [email]);
+  }, []);
   
   const handleAnswerSubmit = async (index, audioBlob) => {
     const ques = questions[index];
@@ -202,11 +197,13 @@ const MockInterview = () => {
 
   const EndTest = async () => {
     if (QandA.size === 0) {
-      if(localStorage.getItem("SkillTuneLogin"))
+      if(localStorage.getItem("SkillTuneLogin")==="true"){
+        console.log("yes logged in")
       navigate("/mockResult", { state: { questions: questions, feedbackData: null, email: email, username: username }, replace: true });
+      }
       else
       navigate("/mockResult", { state: { questions: questions, feedbackData: null}, replace: true });
-      return; 
+     
     }
     console.log(submittedCount)
     console.log(QandA.size)
@@ -238,6 +235,17 @@ const MockInterview = () => {
       setLoading(false);
     }
   };
+
+  async function requestMicrophoneAccess() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      console.log("Microphone access granted.");
+      // Proceed with handling the stream
+    } catch (error) {
+      console.error("Microphone access denied or not available:", error);
+      alert("Microphone access is required for this feature.");
+    }
+  }
 
   return (
     <>
