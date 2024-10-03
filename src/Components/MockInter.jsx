@@ -5,7 +5,7 @@ import Loader from './ChildComp/Loader';
 import Navbar from './ChildComp/Navbar';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, submittedStatus }) => {
+const QuestionComponent = ({ question, qIndex, onAnswerSubmit,onSubmitSuccess, submittedStatus }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState(null);
   const [error, setError] = useState(null);
@@ -13,6 +13,7 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
   const mediaRecorderRef = useRef(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const audioChunksRef = useRef([]);
+  const[isClicked,setIsClicked] = useState(false)
 
  
 
@@ -52,6 +53,7 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
   };
 
   const stopRecording = () => {
+    console.log("stop recording")
     if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
@@ -59,16 +61,24 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
   };
 
   const handleAudioUpload = async () => {
-    stopRecording()
-    setIsSubmitted(true);
+    console.log('should increaes counter: '+ 1)
+    setIsClicked(true)
+    onSubmitSuccess();
+    if(isRecording) stopRecording()
+   
+   
     if (audioBlob && !isSubmitted) { // Check if not already submitted
       const success = await onAnswerSubmit(qIndex, audioBlob);
-      if (success) {
-         // Mark as submitted
-        onSubmitSuccess(); // Notify parent of successful submission
+      if(success) {
+        setIsSubmitted(true);
+       
       }
-      else{setIsSubmitted(false)}
+         // Mark as submitted
+      else{      // Notify parent of successful submission
+        setIsSubmitted(false) 
     }
+  }
+ 
   };
 
   return (
@@ -95,7 +105,7 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
               : 'bg-green-500 hover:bg-green-600'
           } text-white font-bold py-2 px-4 rounded-full mb-4`}
           onClick={isRecording ? stopRecording : startRecording}
-          disabled={isSubmitted} // Disable button if already submitted
+          disabled={isClicked} // Disable button if already submitted
         >
           {isRecording ? 'Stop Recording' : 'Start Recording'}
         </button>
@@ -104,8 +114,8 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
       
         <button 
           onClick={handleAudioUpload}
-          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full ${isSubmitted ? 'opacity-50 cursor-not-allowed' : ''}`}
-          disabled={isSubmitted} // Disable if already submitted
+          className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-full ${isClicked? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isClicked} // Disable if already submitted
         >
           Submit 
         </button>
@@ -120,7 +130,7 @@ const QuestionComponent = ({ question, qIndex, onAnswerSubmit, onSubmitSuccess, 
 const MockInterview = () => {
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [feedbackData, setFeedbackData] = useState({});
+   
   const [QandA, setQandA] = useState(new Map());
   const [submittedCount, setSubmittedCount] = useState(0);
   const location = useLocation();
@@ -169,7 +179,7 @@ const MockInterview = () => {
     };
 
     fetchQuestions();
-  }, []);
+  }, []);   
   
   const handleAnswerSubmit = async (index, audioBlob) => {
     const ques = questions[index];
@@ -192,25 +202,29 @@ const MockInterview = () => {
   };
 
   const handleSubmitSuccess = () => {
-    setSubmittedCount(prev => prev + 1);
+    console.log("submit success: "+ submittedCount)
+    console.log("qandA:", QandA.size)
+    setSubmittedCount(submittedCount=>submittedCount+1);
   };
 
   const EndTest = async () => {
-    if (QandA.size === 0) {
-      if(localStorage.getItem("SkillTuneLogin")==="true"){
-        console.log("yes logged in")
-      navigate("/mockResult", { state: { questions: questions, feedbackData: null, email: email, username: username }, replace: true });
-      }
-      else
-      navigate("/mockResult", { state: { questions: questions, feedbackData: null}, replace: true });
-     
+  
+    if (submittedCount !== QandA.size) {
+      alert("Ensure that all recorded audios are submitted.");
+      
     }
-    console.log(submittedCount)
-    console.log(QandA.size)
-    // if (submittedCount !== QandA.size) {
-    //   alert("Ensure that all recorded audios are submitted.");
-    //   return;
-    // }
+    else{
+      if (QandA.size === 0) {
+        if(localStorage.getItem("SkillTuneLogin")==="true"){
+          console.log("yes logged in")
+        navigate("/mockResult", { state: { questions: questions, feedbackData: null, email: email, username: username }, replace: true });
+        }
+        else
+        navigate("/mockResult", { state: { questions: questions, feedbackData: null}, replace: true });
+       
+      }
+      console.log(submittedCount)
+      console.log(QandA.size)
 
     setLoading(true);
     
@@ -221,10 +235,11 @@ const MockInterview = () => {
 
     try {
       const response = await axios.post(API_URL + "user/evaluateAnswers", questionsAndAnswers);
-      
+      console.log("response: "+ response.status)
       if (response.status === 200) {
         console.log(response.data);
-        setFeedbackData(response.data);
+     
+        console.log("here after feedback")
         navigate("/mockResult", { state: { questions: questions, feedbackData: response.data, email: email, username: username }, replace: true });
       } else {
         alert("Failed to evaluate answers: " + response.status);
@@ -234,7 +249,11 @@ const MockInterview = () => {
     } finally {
       setLoading(false);
     }
+    
+  }
   };
+
+
 
   async function requestMicrophoneAccess() {
     try {
