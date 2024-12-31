@@ -7,11 +7,11 @@ const SkillSearch = ({ onSkillsSelect }) => {
     const [query, setQuery] = useState('');
     const [filteredSkills, setFilteredSkills] = useState([]);
     const [selectedSkills, setSelectedSkills] = useState([]);
-    const [skills, setSkills] = useState([]);
+    const [skills, setSkills] = useState([]); 
    
    //caching.
     useEffect(() => {
-        const cachedSkills = localStorage.getItem('skills');
+        const cachedSkills = localStorage.getItem('skills'); 
         if (cachedSkills) {
             setSkills(JSON.parse(cachedSkills));
         } else {
