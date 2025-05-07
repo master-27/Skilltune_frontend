@@ -2,7 +2,7 @@
     "rewrites": [
       {
         "source": "/api/(.*)",
-        "destination": "http://Skilltune2-env.eba-kxpmfnde.eu-north-1.elasticbeanstalk.com/$1"
+        "destination": "http://skilltune.eu-north-1.elasticbeanstalk.com/$1"
       }
     ]
   }
